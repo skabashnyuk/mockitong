@@ -5,7 +5,13 @@
    <packaging>jar</packaging>
    <version>0.1-SNAPSHOT</version>
    <name>mockitong</name>
-   <url>http://maven.apache.org</url>
+
+   <scm>                  
+      <connection>scm:git:git@github.com:ksmster/mockitong.git</connection>
+      <url>scm:git:git@github.com:ksmster/mockitong.git</url>
+      <developerConnection>scm:git:git@github.com:ksmster/mockitong.git</developerConnection>
+   </scm>
+
    <dependencies>
       <dependency>
          <groupId>org.testng</groupId>
