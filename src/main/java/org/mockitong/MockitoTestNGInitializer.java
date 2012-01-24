@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.testng.IConfigurationListener2;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
@@ -31,9 +32,17 @@ import org.testng.ITestResult;
 import java.lang.reflect.Field;
 
 /**
+ * Mockito annotation initializer for TestNG test.
  * 
+ * To enable annotation initialization you should add MockitoTestNGInitializer
+ * as a listener to you TestNG test. </p>
+ * 
+ * <code><b>@Listeners(MockitoTestNGInitializer.class)</b><br>
+ * public class MyTestClass {<br>
+ * 
+ * }<code>
  */
-public class MockitoTestNGInitializer implements IInvokedMethodListener
+public class MockitoTestNGInitializer implements IInvokedMethodListener, IConfigurationListener2
 {
 
    /**
@@ -44,12 +53,6 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
    public void beforeInvocation(IInvokedMethod method, ITestResult testResult)
    {
 
-      Object[] instances = method.getTestMethod().getTestClass().getInstances(false);
-      for (Object instance : instances)
-      {
-         MockitoAnnotations.initMocks(instance);
-      }
-
    }
 
    /**
@@ -59,26 +62,65 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
    @Override
    public void afterInvocation(IInvokedMethod method, ITestResult testResult)
    {
-      Mockito.validateMockitoUsage();
-      Object[] instances = method.getTestMethod().getTestClass().getInstances(false);
-      for (Object object : instances)
+      if (method.isTestMethod())
       {
-         Field[] fields = object.getClass().getDeclaredFields();
-         for (Field field : fields)
+         Mockito.validateMockitoUsage();
+         Object[] instances = method.getTestMethod().getTestClass().getInstances(false);
+         for (Object object : instances)
          {
-            if (field.isAnnotationPresent(Mock.class) || field.isAnnotationPresent(InjectMocks.class)
-               || field.isAnnotationPresent(Spy.class) || field.isAnnotationPresent(Captor.class))
+            Field[] fields = object.getClass().getDeclaredFields();
+            for (Field field : fields)
             {
-               try
+               if (field.isAnnotationPresent(Mock.class) || field.isAnnotationPresent(InjectMocks.class)
+                  || field.isAnnotationPresent(Spy.class) || field.isAnnotationPresent(Captor.class))
                {
-                  field.setAccessible(true);
-                  field.set(object, null);
-               }
-               catch (IllegalAccessException e)
-               {
+                  try
+                  {
+                     field.setAccessible(true);
+                     field.set(object, null);
+                  }
+                  catch (IllegalAccessException e)
+                  {
+                     throw new RuntimeException(e.getLocalizedMessage(), e);
+                  }
                }
             }
          }
       }
    }
+
+   /**
+    * @see org.testng.IConfigurationListener#onConfigurationSuccess(org.testng.ITestResult)
+    */
+   @Override
+   public void onConfigurationSuccess(ITestResult itr)
+   {
+   }
+
+   /**
+    * @see org.testng.IConfigurationListener#onConfigurationFailure(org.testng.ITestResult)
+    */
+
+   @Override
+   public void onConfigurationFailure(ITestResult itr)
+   {
+   }
+
+   /**
+    * @see org.testng.IConfigurationListener#onConfigurationSkip(org.testng.ITestResult)
+    */
+   @Override
+   public void onConfigurationSkip(ITestResult itr)
+   {
+   }
+
+   /**
+    * @see org.testng.IConfigurationListener2#beforeConfiguration(org.testng.ITestResult)
+    */
+   @Override
+   public void beforeConfiguration(ITestResult tr)
+   {
+      MockitoAnnotations.initMocks(tr.getInstance());
+   }
+
 }
