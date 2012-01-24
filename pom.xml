@@ -6,11 +6,32 @@
    <version>0.1-SNAPSHOT</version>
    <name>mockitong</name>
 
-   <scm>                  
+   <scm>
       <connection>scm:git:git@github.com:ksmster/mockitong.git</connection>
       <url>scm:git:git@github.com:ksmster/mockitong.git</url>
       <developerConnection>scm:git:git@github.com:ksmster/mockitong.git</developerConnection>
    </scm>
+
+   <distributionManagement>
+      <repository>
+         <id>repository.exoplatform.org</id>
+         <url>http://repository.exoplatform.org/service/local/staging/deploy/maven2</url>
+      </repository>
+      <snapshotRepository>
+         <id>repository.exoplatform.org</id>
+         <url>http://repository.exoplatform.org/content/repositories/mockitong-snapshots/</url>
+      </snapshotRepository>
+   </distributionManagement>
+
+   <properties>
+
+      <!-- Defaut compiler settings -->
+      <maven.compiler.optimize>true</maven.compiler.optimize>
+      <maven.compiler.source>1.6</maven.compiler.source>
+      <maven.compiler.target>1.6</maven.compiler.target>
+
+   </properties>
+
 
    <dependencies>
       <dependency>
