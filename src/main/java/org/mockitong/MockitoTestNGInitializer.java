@@ -19,12 +19,11 @@
 package org.mockitong;
 
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.testng.IConfigurationListener2;
+import org.mockito.exceptions.base.MockitoException;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
@@ -42,7 +41,7 @@ import java.lang.reflect.Field;
  * 
  * }<code>
  */
-public class MockitoTestNGInitializer implements IInvokedMethodListener, IConfigurationListener2
+public class MockitoTestNGInitializer implements IInvokedMethodListener
 {
 
    /**
@@ -52,7 +51,44 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener, IConfig
    @Override
    public void beforeInvocation(IInvokedMethod method, ITestResult testResult)
    {
+      Object[] instances = method.getTestMethod().getTestClass().getInstances(false);
+      for (Object object : instances)
+      {
+         // true - if this is a first object initialization. Will be performed  MockitoAnnotations.initMocks
+         // false - Mock's already created. will reset existed.
+         boolean needInitialization = true;
+         Field[] fields = object.getClass().getDeclaredFields();
+         for (Field field : fields)
+         {
+            //field is a mock
+            if (field.isAnnotationPresent(Mock.class) || field.isAnnotationPresent(Spy.class)
+               || field.isAnnotationPresent(Captor.class))
+            {
+               field.setAccessible(true);
+               try
+               {
 
+                  //field's already initialized
+                  Object mock = field.get(object);
+                  if (mock != null)
+                  {
+                     Mockito.reset(mock);
+                     needInitialization = false;
+                  }
+               }
+               catch (IllegalAccessException e)
+               {
+                  throw new MockitoException(e.getLocalizedMessage(), e);
+               }
+            }
+         }
+         // this is a first class initialization no mock's before
+         if (needInitialization)
+         {
+            MockitoAnnotations.initMocks(object);
+         }
+
+      }
    }
 
    /**
@@ -65,62 +101,6 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener, IConfig
       if (method.isTestMethod())
       {
          Mockito.validateMockitoUsage();
-         Object[] instances = method.getTestMethod().getTestClass().getInstances(false);
-         for (Object object : instances)
-         {
-            Field[] fields = object.getClass().getDeclaredFields();
-            for (Field field : fields)
-            {
-               if (field.isAnnotationPresent(Mock.class) || field.isAnnotationPresent(InjectMocks.class)
-                  || field.isAnnotationPresent(Spy.class) || field.isAnnotationPresent(Captor.class))
-               {
-                  try
-                  {
-                     field.setAccessible(true);
-                     field.set(object, null);
-                  }
-                  catch (IllegalAccessException e)
-                  {
-                     throw new RuntimeException(e.getLocalizedMessage(), e);
-                  }
-               }
-            }
-         }
       }
    }
-
-   /**
-    * @see org.testng.IConfigurationListener#onConfigurationSuccess(org.testng.ITestResult)
-    */
-   @Override
-   public void onConfigurationSuccess(ITestResult itr)
-   {
-   }
-
-   /**
-    * @see org.testng.IConfigurationListener#onConfigurationFailure(org.testng.ITestResult)
-    */
-
-   @Override
-   public void onConfigurationFailure(ITestResult itr)
-   {
-   }
-
-   /**
-    * @see org.testng.IConfigurationListener#onConfigurationSkip(org.testng.ITestResult)
-    */
-   @Override
-   public void onConfigurationSkip(ITestResult itr)
-   {
-   }
-
-   /**
-    * @see org.testng.IConfigurationListener2#beforeConfiguration(org.testng.ITestResult)
-    */
-   @Override
-   public void beforeConfiguration(ITestResult tr)
-   {
-      MockitoAnnotations.initMocks(tr.getInstance());
-   }
-
 }
