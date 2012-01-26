@@ -1,4 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   
+   <parent>
+      <groupId>org.exoplatform</groupId>
+      <artifactId>exo.parent</artifactId>
+      <version>8.1</version>
+   </parent>
+
+
    <modelVersion>4.0.0</modelVersion>
    <groupId>org.mockitong</groupId>
    <artifactId>mockitong</artifactId>
@@ -12,26 +20,18 @@
       <developerConnection>scm:git:git@github.com:ksmster/mockitong.git</developerConnection>
    </scm>
 
-   <distributionManagement>
-      <repository>
-         <id>repository.exoplatform.org</id>
-         <url>http://repository.exoplatform.org/service/local/staging/deploy/maven2</url>
-      </repository>
-      <snapshotRepository>
-         <id>repository.exoplatform.org</id>
-         <url>http://repository.exoplatform.org/content/repositories/mockitong-snapshots/</url>
-      </snapshotRepository>
-   </distributionManagement>
+   <prerequisites>
+      <maven>2.2.1</maven>
+   </prerequisites>
 
    <properties>
-
+         <exo.snapshots.repo.url>dav:http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
       <!-- Defaut compiler settings -->
       <maven.compiler.optimize>true</maven.compiler.optimize>
       <maven.compiler.source>1.6</maven.compiler.source>
       <maven.compiler.target>1.6</maven.compiler.target>
-
+      <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
    </properties>
-
 
    <dependencies>
       <dependency>
