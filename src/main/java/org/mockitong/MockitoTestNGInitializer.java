@@ -34,12 +34,13 @@ import java.lang.reflect.Field;
  * Mockito annotation initializer for TestNG test.
  * 
  * To enable annotation initialization you should add MockitoTestNGInitializer
- * as a listener to you TestNG test. </p>
+ * as a listener to you TestNG test. </p> Example of usage
  * 
- * <code><b>@Listeners(MockitoTestNGInitializer.class)</b><br>
- * public class MyTestClass {<br>
  * 
- * }<code>
+ * @ Listeners(MockitoTestNGInitializer.class) 
+ * public class MyTestClass {
+ * 
+ * }
  */
 public class MockitoTestNGInitializer implements IInvokedMethodListener
 {

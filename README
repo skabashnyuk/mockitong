@@ -1,4 +1,22 @@
 Mockito and TestNG inegration
 
 Usage:
-TODO
+
+@Listeners(MockitoTestNGInitializer.class) 
+ public class MyTestClass {
+   @InjectMocks
+   private ListDependent listDependent;
+
+   @InjectMocks
+   private ListWithConstructorDependent listWithConstructorDependent;
+
+   @Mock
+   private List<String> list;
+
+   @Test
+   public void shouldInitMocks()
+   {
+      list.add("test");
+      verify(list).add("test");
+   }
+ }
