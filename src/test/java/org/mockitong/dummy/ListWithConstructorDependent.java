@@ -25,6 +25,8 @@ public class ListWithConstructorDependent
 
    private final List<String> list;
 
+   private boolean constructorInjectionUsed = false;
+
    /**
     * @param list
     */
@@ -32,6 +34,15 @@ public class ListWithConstructorDependent
    {
       super();
       this.list = list;
+      this.constructorInjectionUsed = true;
+   }
+
+   /**
+    * @return the constructorInjectionUsed
+    */
+   public boolean isConstructorInjectionUsed()
+   {
+      return constructorInjectionUsed;
    }
 
    public List<String> getList()

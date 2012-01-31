@@ -3,6 +3,7 @@ package org.mockitong;
 import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -40,11 +41,13 @@ public class MockitoTestNGInitializerTest
    @Test
    public void shouldInjectMocksWithConstructor()
    {
+      assertNotNull(list);
       assertSame(list, listWithConstructorDependent.getList());
+      assertTrue(listWithConstructorDependent.isConstructorInjectionUsed());
    }
 
    @Test
-   public void shouldInjectMocks()
+   public void shouldInjectMocksInFields()
    {
       assertNotNull(list);
       assertSame(list, listDependent.getList());
