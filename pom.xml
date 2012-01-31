@@ -25,7 +25,7 @@
    </prerequisites>
 
    <properties>
-         <exo.snapshots.repo.url>dav:http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
+     <exo.snapshots.repo.url>dav:http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
       <!-- Defaut compiler settings -->
       <maven.compiler.optimize>true</maven.compiler.optimize>
       <maven.compiler.source>1.6</maven.compiler.source>
