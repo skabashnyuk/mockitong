@@ -64,7 +64,7 @@ public class ConfigurationMethodTest
    }
 
    @Test(dependsOnMethods = "shouldBeAbleToConfigureMock")
-   public void shouldCleanMockBetweenTests() throws IOException
+   public void shouldResetMockBetweenTests() throws IOException
    {
       realWorldClass.realWorldMethod();
    }
