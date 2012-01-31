@@ -6,6 +6,8 @@ import static org.testng.Assert.assertSame;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockitong.dummy.ListDependent;
+import org.mockitong.dummy.ListWithConstructorDependent;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -20,32 +22,31 @@ public class MockitoTestNGInitializerTest
 {
 
    @InjectMocks
-   private final ListDependent listDependent = new ListDependent();
+   private ListDependent listDependent;
+
+   @InjectMocks
+   private ListWithConstructorDependent listWithConstructorDependent;
 
    @Mock
    private List<String> list;
 
    @Test
-   public void shouldInitMocksUsingRunner()
+   public void shouldInitMocks()
    {
       list.add("test");
       verify(list).add("test");
    }
 
    @Test
-   public void shouldInjectMocksUsingRunner()
+   public void shouldInjectMocksWithConstructor()
+   {
+      assertSame(list, listWithConstructorDependent.getList());
+   }
+
+   @Test
+   public void shouldInjectMocks()
    {
       assertNotNull(list);
       assertSame(list, listDependent.getList());
-   }
-
-   class ListDependent
-   {
-      private List<String> list;
-
-      public List<String> getList()
-      {
-         return list;
-      }
    }
 }
