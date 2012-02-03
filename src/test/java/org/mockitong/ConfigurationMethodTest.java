@@ -20,6 +20,8 @@ package org.mockitong;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertSame;
 
@@ -46,6 +48,7 @@ public class ConfigurationMethodTest
    @BeforeMethod
    public void prepareTestObject()
    {
+      when(objectManipulator.getLimit()).thenReturn(1999);
       realWorldClass = new RealWorldClass(objectManipulator, 2012);
    }
 
@@ -67,5 +70,11 @@ public class ConfigurationMethodTest
    public void shouldResetMockBetweenTests() throws IOException
    {
       realWorldClass.realWorldMethod();
+   }
+
+   @Test
+   public void shouldBeAbleToConfigureMockInTestngConfigurationMethod() throws IOException
+   {
+      assertEquals(objectManipulator.getLimit(), 1999);
    }
 }

@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.MockUtil;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
@@ -37,13 +38,25 @@ import java.lang.reflect.Field;
  * as a listener to you TestNG test. </p> Example of usage
  * 
  * 
- * @ Listeners(MockitoTestNGInitializer.class) 
- * public class MyTestClass {
+ * @ Listeners(MockitoTestNGInitializer.class) public class MyTestClass {
  * 
  * }
  */
 public class MockitoTestNGInitializer implements IInvokedMethodListener
 {
+   private final MockUtil mockUtil = new MockUtil();
+
+   /**
+    * Check field for mock annotation.
+    * 
+    * @param field
+    * @return true if field annotated with Mock or Spy or Captor.
+    */
+   public static boolean isFileHaveMockAnnotation(Field field)
+   {
+      return field.isAnnotationPresent(Mock.class) || field.isAnnotationPresent(Spy.class)
+         || field.isAnnotationPresent(Captor.class);
+   }
 
    /**
     * @see org.testng.IInvokedMethodListener#beforeInvocation(org.testng.IInvokedMethod,
@@ -62,8 +75,7 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
          for (Field field : fields)
          {
             //field is a mock
-            if (field.isAnnotationPresent(Mock.class) || field.isAnnotationPresent(Spy.class)
-               || field.isAnnotationPresent(Captor.class))
+            if (isFileHaveMockAnnotation(field))
             {
                field.setAccessible(true);
                try
@@ -71,10 +83,10 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
 
                   //field's already initialized
                   Object mock = field.get(object);
-                  if (mock != null)
+                  if (mock != null && mockUtil.isMock(mock))
                   {
-                     Mockito.reset(mock);
                      needInitialization = false;
+                     break;
                   }
                }
                catch (IllegalAccessException e)
@@ -88,7 +100,6 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
          {
             MockitoAnnotations.initMocks(object);
          }
-
       }
    }
 
@@ -102,6 +113,32 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
       if (method.isTestMethod())
       {
          Mockito.validateMockitoUsage();
+         //reset mocks now
+         Object[] instances = method.getTestMethod().getTestClass().getInstances(false);
+         for (Object object : instances)
+         {
+            Field[] fields = object.getClass().getDeclaredFields();
+            for (Field field : fields)
+            {
+               if (isFileHaveMockAnnotation(field))
+               {
+                  field.setAccessible(true);
+                  try
+                  {
+                     //field's already initialized
+                     Object mock = field.get(object);
+                     if (mock != null && mockUtil.isMock(mock))
+                     {
+                        Mockito.reset(mock);
+                     }
+                  }
+                  catch (IllegalAccessException e)
+                  {
+                     throw new MockitoException(e.getLocalizedMessage(), e);
+                  }
+               }
+            }
+         }
       }
    }
 }
