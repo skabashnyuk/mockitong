@@ -52,7 +52,7 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
     * @param field
     * @return true if field annotated with Mock or Spy or Captor.
     */
-   public static boolean isFileHaveMockAnnotation(Field field)
+   public static boolean isFieldHaveMockAnnotation(Field field)
    {
       return field.isAnnotationPresent(Mock.class) || field.isAnnotationPresent(Spy.class)
          || field.isAnnotationPresent(Captor.class);
@@ -75,7 +75,7 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
          for (Field field : fields)
          {
             //field is a mock
-            if (isFileHaveMockAnnotation(field))
+            if (isFieldHaveMockAnnotation(field))
             {
                field.setAccessible(true);
                try
@@ -120,7 +120,7 @@ public class MockitoTestNGInitializer implements IInvokedMethodListener
             Field[] fields = object.getClass().getDeclaredFields();
             for (Field field : fields)
             {
-               if (isFileHaveMockAnnotation(field))
+               if (isFieldHaveMockAnnotation(field))
                {
                   field.setAccessible(true);
                   try
