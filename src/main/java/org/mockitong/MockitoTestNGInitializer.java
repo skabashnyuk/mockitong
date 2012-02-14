@@ -18,18 +18,7 @@
  */
 package org.mockitong;
 
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.MockUtil;
-import org.testng.IInvokedMethod;
-import org.testng.IInvokedMethodListener;
-import org.testng.ITestResult;
-
-import java.lang.reflect.Field;
+import org.mockito.testng.MockitoTestNGListener;
 
 /**
  * Mockito annotation initializer for TestNG test.
@@ -42,103 +31,8 @@ import java.lang.reflect.Field;
  * 
  * }
  */
-public class MockitoTestNGInitializer implements IInvokedMethodListener
+@Deprecated
+public class MockitoTestNGInitializer extends MockitoTestNGListener
 {
-   private final MockUtil mockUtil = new MockUtil();
 
-   /**
-    * Check field for mock annotation.
-    * 
-    * @param field
-    * @return true if field annotated with Mock or Spy or Captor.
-    */
-   public static boolean isFieldHaveMockAnnotation(Field field)
-   {
-      return field.isAnnotationPresent(Mock.class) || field.isAnnotationPresent(Spy.class)
-         || field.isAnnotationPresent(Captor.class);
-   }
-
-   /**
-    * @see org.testng.IInvokedMethodListener#beforeInvocation(org.testng.IInvokedMethod,
-    *      org.testng.ITestResult)
-    */
-   @Override
-   public void beforeInvocation(IInvokedMethod method, ITestResult testResult)
-   {
-      Object[] instances = method.getTestMethod().getTestClass().getInstances(false);
-      for (Object object : instances)
-      {
-         // true - if this is a first object initialization. Will be performed  MockitoAnnotations.initMocks
-         // false - Mock's already created. will reset existed.
-         boolean needInitialization = true;
-         Field[] fields = object.getClass().getDeclaredFields();
-         for (Field field : fields)
-         {
-            //field is a mock
-            if (isFieldHaveMockAnnotation(field))
-            {
-               field.setAccessible(true);
-               try
-               {
-
-                  //field's already initialized
-                  Object mock = field.get(object);
-                  if (mock != null && mockUtil.isMock(mock))
-                  {
-                     needInitialization = false;
-                     break;
-                  }
-               }
-               catch (IllegalAccessException e)
-               {
-                  throw new MockitoException(e.getLocalizedMessage(), e);
-               }
-            }
-         }
-         // this is a first class initialization no mock's before
-         if (needInitialization)
-         {
-            MockitoAnnotations.initMocks(object);
-         }
-      }
-   }
-
-   /**
-    * @see org.testng.IInvokedMethodListener#afterInvocation(org.testng.IInvokedMethod,
-    *      org.testng.ITestResult)
-    */
-   @Override
-   public void afterInvocation(IInvokedMethod method, ITestResult testResult)
-   {
-      if (method.isTestMethod())
-      {
-         Mockito.validateMockitoUsage();
-         //reset mocks now
-         Object[] instances = method.getTestMethod().getTestClass().getInstances(false);
-         for (Object object : instances)
-         {
-            Field[] fields = object.getClass().getDeclaredFields();
-            for (Field field : fields)
-            {
-               if (isFieldHaveMockAnnotation(field))
-               {
-                  field.setAccessible(true);
-                  try
-                  {
-                     //field's already initialized
-                     Object mock = field.get(object);
-                     if (mock != null && mockUtil.isMock(mock))
-                     {
-                        Mockito.reset(mock);
-                     }
-                  }
-                  catch (IllegalAccessException e)
-                  {
-                     throw new MockitoException(e.getLocalizedMessage(), e);
-                  }
-               }
-            }
-         }
-      }
-   }
 }
