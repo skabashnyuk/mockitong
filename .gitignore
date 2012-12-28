@@ -5,8 +5,15 @@
 .project
 .settings/
 target/
-test-output/
 bin/
+test-output/
+
+# Idea #
+##################
+*.iml
+*.ipr
+*.iws
+.idea/
 
 # Compiled source #
 ###################
@@ -16,6 +23,7 @@ bin/
 *.exe
 *.o
 *.so
+*.sh
 
 # Packages #
 ############
@@ -33,6 +41,7 @@ bin/
 *.ear
 
 
+
 # Logs and databases #
 ######################
 *.log
@@ -45,3 +54,5 @@ bin/
 ehthumbs.db
 Icon?
 Thumbs.db
+*/overlays
+*~
