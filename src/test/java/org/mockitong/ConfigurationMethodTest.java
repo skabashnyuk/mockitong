@@ -19,13 +19,11 @@
 package org.mockitong;
 
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertSame;
+import static org.mockito.Mockito.*;
+import static org.testng.Assert.*;
 
 import org.mockito.Mock;
+import org.mockito.testng.MockitoTestNGListener;
 import org.mockitong.dummy.ObjectManipulator;
 import org.mockitong.dummy.RealWorldClass;
 import org.testng.annotations.BeforeMethod;
@@ -37,7 +35,7 @@ import java.io.IOException;
 /**
  * 
  */
-@Listeners(MockitoTestNGInitializer.class)
+@Listeners(MockitoTestNGListener.class)
 public class ConfigurationMethodTest
 {
    @Mock

@@ -1,9 +1,16 @@
 package org.mockito.testng;
 
+import static org.mockito.internal.util.reflection.Fields.annotatedBy;
+
+import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.configuration.CaptorAnnotationProcessor;
+import org.mockito.internal.util.reflection.Fields;
+import org.mockito.internal.util.reflection.InstanceField;
 import org.testng.IInvokedMethod;
 import org.testng.ITestResult;
 
+import java.util.List;
 import java.util.WeakHashMap;
 
 public class MockitoBeforeTestNGMethod {
@@ -37,9 +44,10 @@ public class MockitoBeforeTestNGMethod {
     }
 
     private void initializeCaptors(Object instance) {
-        /*
-         * TODO Refactor #processAnnotationOn methods out of DefaultAnnotationEngine
-         */
+        List<InstanceField> instanceFields = Fields.allDeclaredFieldsOf(instance).filter(annotatedBy(Captor.class)).instanceFields();
+        for (InstanceField instanceField : instanceFields) {
+            new CaptorAnnotationProcessor().process(instanceField.annotation(Captor.class), instanceField.jdkField());
+        }
     }
 
     private void markAsInitialized(Object instance) {

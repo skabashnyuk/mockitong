@@ -1,12 +1,11 @@
 package org.mockitong;
 
-import static org.mockito.Mockito.verify;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertSame;
-import static org.testng.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+import static org.testng.Assert.*;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.testng.MockitoTestNGListener;
 import org.mockitong.dummy.ListDependent;
 import org.mockitong.dummy.ListWithConstructorDependent;
 import org.testng.annotations.Listeners;
@@ -18,7 +17,7 @@ import java.util.List;
  * Analog of JUnit44RunnerTest
  * 
  */
-@Listeners(MockitoTestNGInitializer.class)
+@Listeners(MockitoTestNGListener.class)
 public class MockitoTestNGInitializerTest
 {
 

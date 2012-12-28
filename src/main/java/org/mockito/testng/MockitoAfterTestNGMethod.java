@@ -1,13 +1,18 @@
 package org.mockito.testng;
 
+import static org.mockito.internal.util.reflection.Fields.annotatedBy;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.reflection.Fields;
 import org.testng.IInvokedMethod;
 import org.testng.ITestResult;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,14 +31,14 @@ public class MockitoAfterTestNGMethod {
         Mockito.reset(instanceMocksOf(instance).toArray());
     }
 
-    private Set<Object> instanceMocksOf(Object instance) {
-        Class<?> testClass = instance.getClass();
-        Set<Object> instanceMocks = new HashSet<Object>();
-
-        for (Class<?> clazz = testClass; clazz != Object.class; clazz = clazz.getSuperclass()) {
-            instanceMocks.addAll(instanceMocksIn(instance, clazz));
-        }
-        return instanceMocks;
+    @SuppressWarnings({"deprecation", "unchecked"})
+    private Collection<Object> instanceMocksOf(Object instance) {
+        return Fields.allDeclaredFieldsOf(instance)
+                                            .filter(annotatedBy(Mock.class,
+                                                                Spy.class,
+                                                                MockitoAnnotations.Mock.class))
+                                            .notNull()
+                                            .assignedValues();
     }
 
     private Set<Object> instanceMocksIn(Object instance, Class<?> clazz) {
