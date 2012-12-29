@@ -1,11 +1,4 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   
-   <parent>
-      <groupId>org.exoplatform</groupId>
-      <artifactId>exo.parent</artifactId>
-      <version>8.1</version>
-   </parent>
-
 
    <modelVersion>4.0.0</modelVersion>
    <groupId>org.mockitong</groupId>
@@ -13,16 +6,72 @@
    <packaging>jar</packaging>
    <version>0.4-SNAPSHOT</version>
    <name>mockitong</name>
+   <description>Testng listener assist in mock creation</description>
 
    <scm>
-      <connection>scm:git:git@github.com:ksmster/mockitong.git</connection>
-      <url>scm:git:git@github.com:ksmster/mockitong.git</url>
-      <developerConnection>scm:git:git@github.com:ksmster/mockitong.git</developerConnection>
+       <connection>scm:git:git@github.com:skabashnyuk/mockitong.git</connection>
+       <developerConnection>scm:git:git@github.com:skabashnyuk/mockitong.git</developerConnection>
+       <url>https://github.com/ksmster/mockitongd</url>
    </scm>
 
-   <prerequisites>
-      <maven>2.2.1</maven>
-   </prerequisites>
+    <licenses>
+        <license>
+            <name>LGPL, version 2.1</name>
+            <url>http://www.opensource.org/licenses/lgpl-license.php</url>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <repository>
+            <id>repository.exoplatform.org</id>
+            <url>${everrest.releases.repo.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>repository.exoplatform.org</id>
+            <url>${everrest.snapshots.repo.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <developers>
+        <developer>
+            <id>sergey.kabashnyuk</id>
+            <name>Serget Kabashnyuk</name>
+            <email>skabashnyuk@exoplatform.com</email>
+            <roles>
+                <role>Owner</role>
+            </roles>
+        </developer>
+    </developers>
+
+
+    <repositories>
+        <repository>
+            <id>repository.jboss.org</id>
+            <url>http://repository.jboss.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>repository.exoplatform.org</id>
+            <url>http://repository.exoplatform.org/public</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repository.exoplatform.org</id>
+            <url>http://repository.exoplatform.org/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <prerequisites>
+      <maven>3.0.4</maven>
+    </prerequisites>
 
    <properties>
        <exo.snapshots.repo.url>dav:http://repository.exoplatform.org/content/repositories/thirdparty-snapshots/</exo.snapshots.repo.url>
@@ -37,31 +86,83 @@
        <!-- Encoding -->
        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+       <!-- Dependencies version -->
+       <mockito.version>1.9.5</mockito.version>
+       <testng.version>6.8</testng.version>
    </properties>
 
    <dependencies>
       <dependency>
          <groupId>org.testng</groupId>
          <artifactId>testng</artifactId>
-         <version>6.3.1</version>
+          <scope>provided</scope>
+         <version>${testng.version}</version>
       </dependency>
       <dependency>
          <groupId>org.mockito</groupId>
          <artifactId>mockito-all</artifactId>
-         <version>1.9.5</version>
+         <version>${mockito.version}</version>
       </dependency>
    </dependencies>
-   <build>
-      <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-eclipse-plugin</artifactId>
-            <version>2.8</version>
-            <configuration>
-               <downloadSources>true</downloadSources>
-               <downloadJavadocs>true</downloadJavadocs>
-            </configuration>
-         </plugin>
-      </plugins>
-   </build>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Date>${maven.build.timestamp}</Date>
+                            <SCM-URL>${project.scm.connection}</SCM-URL>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Date>${maven.build.timestamp}</Date>
+                            <SCM-URL>${project.scm.connection}</SCM-URL>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.8</version>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
