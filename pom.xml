@@ -25,12 +25,18 @@
    </prerequisites>
 
    <properties>
-     <exo.snapshots.repo.url>dav:http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
-      <!-- Defaut compiler settings -->
-      <maven.compiler.optimize>true</maven.compiler.optimize>
-      <maven.compiler.source>1.6</maven.compiler.source>
-      <maven.compiler.target>1.6</maven.compiler.target>
-      <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
+       <exo.snapshots.repo.url>dav:http://repository.exoplatform.org/content/repositories/thirdparty-snapshots/</exo.snapshots.repo.url>
+       <maven.compiler.optimize>true</maven.compiler.optimize>
+       <maven.compiler.source>1.6</maven.compiler.source>
+       <maven.compiler.target>1.6</maven.compiler.target>
+       <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
+       <!-- Repositories URLs -->
+       <everrest.releases.repo.url>http://repository.exoplatform.org/content/repositories/thirdparty/</everrest.releases.repo.url>
+       <everrest.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/thirdparty-snapshots/</everrest.snapshots.repo.url>
+
+       <!-- Encoding -->
+       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
    </properties>
 
    <dependencies>
