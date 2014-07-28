@@ -21,7 +21,7 @@
     </parent>
     <groupId>org.mockitong</groupId>
     <artifactId>mockitong</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
     <packaging>jar</packaging>
     <name>mockitong</name>
     <description>Testng listener assist in mock creation</description>
@@ -38,7 +38,7 @@
     <scm>
         <connection>scm:git:git@github.com:skabashnyuk/mockitong.git</connection>
         <developerConnection>scm:git:git@github.com:skabashnyuk/mockitong.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>0.4</tag>
         <url>https://github.com/ksmster/mockitongd</url>
     </scm>
     <properties>
