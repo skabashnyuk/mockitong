@@ -1,37 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2012-2014 Codenvy, S.A.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+      Codenvy, S.A. - initial API and implementation
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-   <modelVersion>4.0.0</modelVersion>
-   <groupId>org.mockitong</groupId>
-   <artifactId>mockitong</artifactId>
-   <packaging>jar</packaging>
-   <version>0.4-SNAPSHOT</version>
-   <name>mockitong</name>
-   <description>Testng listener assist in mock creation</description>
-
-   <scm>
-       <connection>scm:git:git@github.com:skabashnyuk/mockitong.git</connection>
-       <developerConnection>scm:git:git@github.com:skabashnyuk/mockitong.git</developerConnection>
-       <url>https://github.com/ksmster/mockitongd</url>
-   </scm>
-
-    <licenses>
-        <license>
-            <name>LGPL, version 2.1</name>
-            <url>http://www.opensource.org/licenses/lgpl-license.php</url>
-        </license>
-    </licenses>
-
-    <distributionManagement>
-        <repository>
-            <id>repository.exoplatform.org</id>
-            <url>${everrest.releases.repo.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>repository.exoplatform.org</id>
-            <url>${everrest.snapshots.repo.url}</url>
-        </snapshotRepository>
-    </distributionManagement>
-
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>maven-parent-pom</artifactId>
+        <groupId>com.codenvy</groupId>
+        <version>3.3.2</version>
+        <relativePath />
+    </parent>
+    <groupId>org.mockitong</groupId>
+    <artifactId>mockitong</artifactId>
+    <version>0.4-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>mockitong</name>
+    <description>Testng listener assist in mock creation</description>
     <developers>
         <developer>
             <id>sergey.kabashnyuk</id>
@@ -42,127 +35,27 @@
             </roles>
         </developer>
     </developers>
-
-
-    <repositories>
-        <repository>
-            <id>repository.jboss.org</id>
-            <url>http://repository.jboss.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>maven2-repository.dev.java.net</id>
-            <url>http://download.java.net/maven/2/</url>
-        </repository>
-        <repository>
-            <id>repository.exoplatform.org</id>
-            <url>http://repository.exoplatform.org/public</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>repository.exoplatform.org</id>
-            <url>http://repository.exoplatform.org/public</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <prerequisites>
-      <maven>3.0.4</maven>
-    </prerequisites>
-
-   <properties>
-       <exo.snapshots.repo.url>dav:http://repository.exoplatform.org/content/repositories/thirdparty-snapshots/</exo.snapshots.repo.url>
-       <maven.compiler.optimize>true</maven.compiler.optimize>
-       <maven.compiler.source>1.6</maven.compiler.source>
-       <maven.compiler.target>1.6</maven.compiler.target>
-       <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
-       <!-- Repositories URLs -->
-       <everrest.releases.repo.url>http://repository.exoplatform.org/content/repositories/thirdparty/</everrest.releases.repo.url>
-       <everrest.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/thirdparty-snapshots/</everrest.snapshots.repo.url>
-
-       <!-- Encoding -->
-       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-       <!-- Dependencies version -->
-       <mockito.version>1.9.5</mockito.version>
-       <testng.version>6.8</testng.version>
-   </properties>
-
-   <dependencies>
-      <dependency>
-         <groupId>org.testng</groupId>
-         <artifactId>testng</artifactId>
-          <scope>provided</scope>
-         <version>${testng.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.mockito</groupId>
-         <artifactId>mockito-all</artifactId>
-         <version>${mockito.version}</version>
-      </dependency>
-   </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Date>${maven.build.timestamp}</Date>
-                            <SCM-URL>${project.scm.connection}</SCM-URL>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Date>${maven.build.timestamp}</Date>
-                            <SCM-URL>${project.scm.connection}</SCM-URL>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.8</version>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <scm>
+        <connection>scm:git:git@github.com:skabashnyuk/mockitong.git</connection>
+        <developerConnection>scm:git:git@github.com:skabashnyuk/mockitong.git</developerConnection>
+        <url>https://github.com/ksmster/mockitongd</url>
+    </scm>
+    <properties>
+        <!-- Dependencies version -->
+        <mockito.version>1.9.5</mockito.version>
+        <testng.version>6.8</testng.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
