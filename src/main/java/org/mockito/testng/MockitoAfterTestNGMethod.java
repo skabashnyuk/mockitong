@@ -12,19 +12,17 @@ package org.mockito.testng;
 
 import static org.mockito.internal.util.reflection.Fields.annotatedBy;
 
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.Fields;
 import org.testng.IInvokedMethod;
 import org.testng.ITestResult;
-
-import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 public class MockitoAfterTestNGMethod {
 
@@ -45,8 +43,7 @@ public class MockitoAfterTestNGMethod {
     private Collection<Object> instanceMocksOf(Object instance) {
         return Fields.allDeclaredFieldsOf(instance)
                                             .filter(annotatedBy(Mock.class,
-                                                                Spy.class,
-                                                                MockitoAnnotations.Mock.class))
+                                                                Spy.class))
                                             .notNull()
                                             .assignedValues();
     }
